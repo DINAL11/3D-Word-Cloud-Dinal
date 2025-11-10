@@ -1,113 +1,112 @@
-# 3D Word Cloud - Dinal
+# 3D Word Cloud Visualization
 
-visualize article topics in an interactive 3d space using react three fiber and fastapi
+An interactive 3D word cloud application that analyzes news articles and visualizes topics using React Three Fiber and FastAPI.
 
-## what you need
+## Tech Stack
 
-- python 3.9+
-- node.js 16+
-- thats it
+### Frontend
+- React 18 with TypeScript
+- React Three Fiber (Three.js for React)
+- @react-three/drei for 3D helpers
+- Vite for build tooling
+- Tailwind CSS for styling
 
-## setup
+### Backend
+- Python 3.9+
+- FastAPI
+- BeautifulSoup4 for web scraping
+- scikit-learn for NLP/topic modeling
+- NLTK for text processing
+- requests for HTTP calls
 
-clone the repo and run the setup script:
+## Prerequisites
+
+- Node.js 16+ and npm
+- Python 3.9+
+- pip (Python package manager)
+
+## Quick Start
+
+### One-Command Setup (Recommended)
+
+From the project root directory, run:
 
 ```bash
-git clone <your-repo-url>
-cd 3D-Word-Cloud-Dinal
-
-# on mac/linux
+# On Unix/Mac/Linux
 chmod +x setup.sh
 ./setup.sh
 
-# on windows
+# On Windows
 setup.bat
 ```
 
-the script installs everything and starts both servers automatically
+This script will:
+1. Install all frontend dependencies
+2. Install all backend dependencies
+3. Download required NLTK data
+4. Start both servers concurrently
 
-## if setup script doesnt work
+The application will be available at:
+- Frontend: http://localhost:5173
+- Backend API: http://localhost:8000
+- API Docs: http://localhost:8000/docs
 
-### backend
+### Manual Setup
+
+If you prefer to set up manually:
+
+#### Backend Setup
+
 ```bash
 cd backend
-python3 -m venv venv
-source venv/bin/activate  # windows: venv\Scripts\activate
+python -m venv venv
+
+# Activate virtual environment
+# On Unix/Mac:
+source venv/bin/activate
+# On Windows:
+venv\Scripts\activate
+
 pip install -r requirements.txt
+
+# Download NLTK data
 python -c "import nltk; nltk.download('punkt'); nltk.download('stopwords'); nltk.download('punkt_tab')"
+
+# Run the backend
 uvicorn main:app --reload
 ```
 
-### frontend
-open a new terminal:
+#### Frontend Setup
+
 ```bash
 cd frontend
 npm install
 npm run dev
 ```
 
-## using it
 
-1. open http://localhost:5173 in your browser
-2. paste an article url or click one of the sample urls
-3. click analyze and wait a few seconds
-4. interact with the 3d visualization - drag to rotate, scroll to zoom, hover over words
+## How It Works
 
-## sample urls
+1. **User Input**: User enters a news article URL
+2. **Article Fetching**: Backend scrapes the article content using BeautifulSoup
+3. **Text Processing**: Text is cleaned, tokenized, and stop words are removed
+4. **Topic Modeling**: TF-IDF vectorization extracts key terms and their importance
+5. **Visualization**: Frontend renders words in 3D space with size/color based on weight
+6. **Interaction**: Users can rotate, zoom, and interact with the word cloud
 
-- https://www.bbc.com/news/technology
-- https://techcrunch.com
-- https://www.theguardian.com/technology
 
-## tech stack
+## Troubleshooting
 
-**backend:**
-- fastapi for the api
-- beautifulsoup4 for scraping articles
-- scikit-learn for nlp/topic modeling
-- nltk for text processing
+### Backend Issues
+- **Port already in use**: Change port in `backend/main.py` or kill process on port 8000
+- **NLTK data missing**: Run `python -c "import nltk; nltk.download('punkt'); nltk.download('stopwords')"`
+- **Module not found**: Ensure virtual environment is activated and dependencies installed
 
-**frontend:**
-- react + typescript
-- react three fiber for 3d graphics
-- vite for fast development
+### Frontend Issues
+- **Port already in use**: Vite will automatically try the next available port
+- **Module not found**: Run `npm install` in the frontend directory
+- **Build errors**: Clear node_modules and reinstall: `rm -rf node_modules && npm install`
 
-## how it works
-
-1. you give it an article url
-2. backend scrapes the article content
-3. nlp analysis extracts key topics using tf-idf
-4. frontend renders the keywords as a 3d word cloud
-5. word size = importance, color = relevance
-
-## troubleshooting
-
-**cant analyze article:**
-- some sites block scrapers or are behind paywalls
-- try a different url
-
-**backend errors:**
-- make sure youre in the venv
-- check if nltk data downloaded properly
-
-**frontend blank page:**
-- check browser console for errors
-- make sure backend is running on port 8000
-
-**port already in use:**
-- kill the process or change the port in the code
-
-## api endpoints
-
-- `POST /analyze` - analyze an article url
-- `GET /health` - check if api is running
-- `GET /docs` - interactive api documentation at http://localhost:8000/docs
-
-## notes
-
-- analysis takes 5-15 seconds depending on article length
-- works best with articles between 500-5000 words
-- returns up to 50 keywords
-- only works with publicly accessible html pages
-
-thats it, lookinf forward to hear from you!
+### CORS Issues
+- Backend includes CORS middleware for localhost development
+- For production, update allowed origins in `backend/main.py`
