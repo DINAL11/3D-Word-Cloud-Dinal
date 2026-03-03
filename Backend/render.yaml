@@ -1,0 +1,10 @@
+services:
+  - type: web
+    name: 3D-Word-Cloud-Backend
+    runtime: python
+    pythonVersion: 3.9
+    buildCommand: pip install -r requirements.txt && python -c "import nltk; nltk.download('punkt'); nltk.download('stopwords'); nltk.download('punkt_tab')"
+    startCommand: uvicorn main:app --host 0.0.0.0 --port $PORT
+    envVars:
+      - key: FRONTEND_URL
+        value: https://your-vercel-frontend-url.vercel.app

@@ -23,19 +23,19 @@ interface Word3DProps {
 
 // Individual 3D word component
 function Word3D({ word, position, size, weight, frequency }: Word3DProps) {
-  const meshRef = useRef<THREE.Mesh>(null);
+  const groupRef = useRef<THREE.Group>(null);
   const [hovered, setHovered] = useState(false);
 
   // Animate word entrance
   useFrame((state) => {
-    if (meshRef.current) {
+    if (groupRef.current) {
       const time = state.clock.elapsedTime;
       
       // Gentle floating animation
-      meshRef.current.position.y = position[1] + Math.sin(time + position[0]) * 0.1;
+      groupRef.current.position.y = position[1] + Math.sin(time + position[0]) * 0.1;
       
       // Slight rotation
-      meshRef.current.rotation.y = Math.sin(time * 0.5 + position[0]) * 0.1;
+      groupRef.current.rotation.y = Math.sin(time * 0.5 + position[0]) * 0.1;
     }
   });
 
@@ -48,7 +48,7 @@ function Word3D({ word, position, size, weight, frequency }: Word3DProps) {
   const displayWord = word.replace(/_/g, ' ');
 
   return (
-    <group position={position} ref={meshRef}>
+    <group position={position} ref={groupRef}>
       <Text
         fontSize={size}
         color={color}

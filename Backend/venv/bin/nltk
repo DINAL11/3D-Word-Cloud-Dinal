@@ -1,4 +1,6 @@
-#!/Users/dinaldholiya/3D-Word-Cloud/backend/venv/bin/python
+#!/bin/sh
+'''exec' "/Users/dinaldholiya/All Projects/3D-Word-Cloud-Dinal/Backend/venv/bin/python3" "$0" "$@"
+' '''
 # -*- coding: utf-8 -*-
 import re
 import sys

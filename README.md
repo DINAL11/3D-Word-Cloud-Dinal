@@ -27,7 +27,7 @@ An interactive 3D word cloud application that analyzes news articles and visuali
 
 ## Quick Start
 
-### One-Command Setup (Recommended)
+### One-Command Setup (Recommended) - Local Development
 
 From the project root directory, run:
 
@@ -50,6 +50,45 @@ The application will be available at:
 - Frontend: http://localhost:5173
 - Backend API: http://localhost:8000
 - API Docs: http://localhost:8000/docs
+
+## Deployment
+
+### Frontend Deployment (Vercel)
+
+1. Push your code to GitHub
+2. Go to [Vercel](https://vercel.com)
+3. Click "Add New..." → "Project"
+4. Import your GitHub repository
+5. Configure build settings:
+   - **Framework Preset**: Vite
+   - **Build Command**: `cd frontend && npm install && npm run build`
+   - **Output Directory**: `frontend/dist`
+   - **Install Command**: `npm install`
+6. Add environment variables if needed (VITE_API_URL pointing to your Render backend)
+7. Deploy
+
+Vercel will automatically deploy on every push to main. Frontend URL will be provided after deployment.
+
+### Backend Deployment (Render)
+
+1. Push your code to GitHub
+2. Go to [Render](https://render.com)
+3. Click "New +" → "Web Service"
+4. Connect your GitHub repository
+5. Configure the service:
+   - **Name**: 3D-Word-Cloud-Backend
+   - **Root Directory**: `Backend`
+   - **Runtime**: Python 3
+   - **Build Command**: `pip install -r requirements.txt && python -c "import nltk; nltk.download('punkt'); nltk.download('stopwords'); nltk.download('punkt_tab')"`
+   - **Start Command**: `uvicorn main:app --host 0.0.0.0 --port $PORT`
+6. Set environment variables:
+   - Add `PYTHON_VERSION = 3.9` (or your Python version)
+7. Deploy
+
+After deployment, note your Render backend URL (e.g., `https://3d-word-cloud-backend.onrender.com`) and update your frontend `.env` file with:
+```
+VITE_API_URL=https://your-render-backend-url
+```
 
 ### Manual Setup
 
@@ -106,7 +145,32 @@ npm run dev
 - **Port already in use**: Vite will automatically try the next available port
 - **Module not found**: Run `npm install` in the frontend directory
 - **Build errors**: Clear node_modules and reinstall: `rm -rf node_modules && npm install`
+- **TypeScript errors on build**: Ensure all Three.js refs use correct types (Mesh for meshes, Group for groups)
 
-### CORS Issues
-- Backend includes CORS middleware for localhost development
-- For production, update allowed origins in `backend/main.py`
+### Deployment Issues
+- **NLTK data not downloading on Render**: Ensure the build command includes NLTK downloads: `python -c "import nltk; nltk.download('punkt'); nltk.download('stopwords'); nltk.download('punkt_tab')"`
+- **CORS errors in production**: Update `backend/main.py` to include your Vercel frontend domain in allowed origins
+- **Cold starts on Render**: Free tier has 15-minute inactivity spindown. Upgrade for production use
+
+### CORS Configuration for Production
+
+In `backend/main.py`, update the CORS middleware:
+```python
+from fastapi.middleware.cors import CORSMiddleware
+
+app.add_middleware(
+    CORSMiddleware,
+    allow_origins=[
+        "https://your-vercel-domain.vercel.app",  # Your Vercel frontend URL
+        "http://localhost:5173",  # Local development
+    ],
+    allow_credentials=True,
+    allow_methods=["*"],
+    allow_headers=["*"],
+)
+```
+
+## Recent Fixes
+
+- **Fixed TypeScript compilation error** in `src/components/WordCloud3D.tsx`: Changed ref type from `THREE.Mesh` to `THREE.Group` for proper group element typing
+- **Added deployment configuration** for Vercel (frontend) and Render (backend)

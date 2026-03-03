@@ -37,7 +37,7 @@ deactivate () {
 # unset irrelevant variables
 deactivate nondestructive
 
-VIRTUAL_ENV="/Users/dinaldholiya/3D-Word-Cloud/backend/venv"
+VIRTUAL_ENV="/Users/dinaldholiya/All Projects/3D-Word-Cloud-Dinal/Backend/venv"
 export VIRTUAL_ENV
 
 _OLD_VIRTUAL_PATH="$PATH"
