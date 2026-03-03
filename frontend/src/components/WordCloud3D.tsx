@@ -3,6 +3,8 @@ import { Canvas, useFrame } from '@react-three/fiber';
 import { OrbitControls, Text } from '@react-three/drei';
 import * as THREE from 'three';
 
+// Build trigger comment: ensure Vercel picks up latest changes
+
 interface WordData {
   word: string;
   weight: number;
